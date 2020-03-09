@@ -2,7 +2,9 @@
 
 Using CloudFlare Workers with cookies.
 
-The worker:
+## Worker
+
+https://cookie.tomashubelbauer.workers.dev
 
 ```javascript
 addEventListener('fetch', event => {
@@ -24,7 +26,9 @@ async function handleRequest(request) {
 }
 ```
 
-Using the cookie with CRA:
+## Site
+
+- [ ] Build a CRA site to demo this
 
 ## To-Do
 
