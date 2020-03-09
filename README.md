@@ -1,6 +1,7 @@
 # Cloudflare Workers Cookie
 
-Using CloudFlare Workers with cookies.
+Using CloudFlare Workers with cookies demonstrated by a CRA site which proxies
+the calls to the setter and getter endpoints.
 
 ## Worker
 
@@ -13,23 +14,39 @@ addEventListener('fetch', event => {
 
 async function handleRequest(request) {
   const url = new URL(request.url);
-  if (url.search) {
-    return new Response(undefined, {
-      headers: {
-        'Set-Cookie': url.search
-      }
-    });
+  switch (url.pathname) {
+    case '/set': {
+      return new Response(undefined, {
+        headers: {
+          'Set-Cookie': `site=${url.search}; HttpOnly`
+        }
+      });
+    }
+    case '/get': {
+      const cookie = request.headers.get('Cookie');
+      return new Response('hello world ' + cookie);
+    }
   }
 
-  const cookie = request.headers.get('Cookie');
-  return new Response('hello world ' + cookie);
+  throw new Error(`Invalid route ${request.url}.`);
 }
 ```
 
 ## Site
 
-- [ ] Build a CRA site to demo this
+```sh
+npm i --save-dev create-react-app
+npx create-react-app site --template typescript
+cd site
+echo HTTP=true > .env
+npm start
+```
+
+`package.json`
+```json
+{
+  "proxy": "https://cookie.tomashubelbauer.workers.dev"
+}
+```
 
 ## To-Do
-
-### Finalize the demo
